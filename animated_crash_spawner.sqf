@@ -6,13 +6,13 @@
 	Script Version: 1.3.1
 */
  
-private["_show_name", "_show_marker", "_finder","_timeAdjust","_timeToSpawn","_spawnRoll","_crash","_hasAdjustment","_newHeight","_adjustedPos","_useStatic","_crashDamage","_lootRadius","_preWaypoints","_preWaypointPos","_endTime","_startTime","_safetyPoint","_heliStart","_deadBody","_exploRange","_heliModel","_lootPos","_list","_craters","_dummy","_wp2","_wp3","_landingzone","_aigroup","_wp","_helipilot","_crash","_crashwreck","_smokerand","_staticcoords","_pos","_dir","_position","_num","_config","_itemType","_itemChance","_weights","_index","_iArray","_crashModel","_lootTable","_guaranteedLoot","_randomizedLoot","_frequency","_variance","_spawnChance","_spawnMarker","_spawnRadius","_spawnFire","_permanentFire","_crashName","_marker", "_markerRadius","_hint","_itemTypes"];
+private["_show_name","_show_marker", "_finder","_timeAdjust","_timeToSpawn","_spawnRoll","_crash","_hasAdjustment","_newHeight","_adjustedPos","_useStatic","_crashDamage","_lootRadius","_preWaypoints","_preWaypointPos","_endTime","_startTime","_safetyPoint","_heliStart","_deadBody","_exploRange","_heliModel","_lootPos","_list","_craters","_dummy","_wp2","_wp3","_landingzone","_aigroup","_wp","_helipilot","_crash","_crashwreck","_smokerand","_staticcoords","_pos","_dir","_mdot","_position","_num","_config","_itemType","_itemChance","_weights","_index","_iArray","_crashModel","_lootTable","_guaranteedLoot","_randomizedLoot","_frequency","_variance","_spawnChance","_spawnMarker","_spawnRadius","_spawnFire","_permanentFire","_crashName","_marker", "_markerRadius","_hint","_itemTypes"];
 
 _spawnChance			= 100;				// Percent chance of spawning a crash number between 0 - 100 
 _guaranteedLoot			= 8;				// Guaranteed Loot Spawns
 _randomizedLoot			= 8;				// Random number of loot piles as well as the guaranteed ones
 _spawnFire				= true;				// Spawn Smoke/Fire at the helicrash
-_fadeFire				= true;				// Fade the Smoke/Fire overtime
+_fadeFire				= false;			// Fade the Smoke/Fire overtime
 _preWaypoints			= 2;				// Amount of way points the heli flies to before crashing
 _crashDamage			= 1;				// Amount of damage the heli can take before crashing (between 0.1 and 1) Lower the number and the heli can take less damage before crashing 1 damage is fully destroyed and 0.1 something like a DMR could one shot the heli
 _exploRange				= 200;				// How far away from the predefined crash point should the heli start crashing
@@ -121,7 +121,7 @@ if (_spawnRoll <= _spawnChance) then
 	if (_plane) then
 	{
 		_crashDamage = .5;
-		_crashwreck	setdamage .7;
+		_crashwreck setDamage .4;
 		_crashwreck forceSpeed 250;
 		_crashwreck setspeedmode "LIMITED";
 	}
@@ -231,9 +231,8 @@ if (_spawnRoll <= _spawnChance) then
 		
 		if (_spawnFire) then
 		{
-			PVDZE_obj_Fire = [_crash,2,time,false,_fadeFire];
+			PVDZE_obj_Fire = [_crash, 4, time, false, _fadeFire];
 			publicVariable "PVDZE_obj_Fire";
-			_crash setVariable ["fadeFire",_fadeFire,true];
 		};
 		
 		_num 				= round(random _randomizedLoot) + _guaranteedLoot;
@@ -279,13 +278,14 @@ if (_spawnRoll <= _spawnChance) then
 			_marker setMarkerColor "ColorYellow";
 			_marker setMarkerAlpha 0.5;
 			_marker setMarkerSize [(_markerRadius + 50), (_markerRadius + 50)];
+			_marker setMarkerText _crashName;
 			
 			if(_show_name) then {
 			
-				_dot 	= createMarker ["dot", _marker_position];
-				_dot 	setMarkerColor "ColorBlack";
-				_dot 	setMarkerType "mil_dot";
-				_dot 	setMarkerText _crashName;
+				_mdot 	= createMarker [format ["dot_%1", _startTime], _marker_position];
+				_mdot 	setMarkerColor "ColorBlack";
+				_mdot 	setMarkerType "mil_dot";
+				_mdot 	setMarkerText _crashName;
 				
 			};
 		
@@ -313,7 +313,7 @@ if (_spawnRoll <= _spawnChance) then
 			deleteMarker _marker;
 			
 			if(_show_name) then {
-				deleteMarker _dot;
+				deleteMarker _mdot;
 			};
 		
 		};
