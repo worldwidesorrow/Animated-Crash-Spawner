@@ -1,9 +1,9 @@
 /*
-Script Name: animated_crash_spawner.sqf
-Original Author: Grafzahl / Finest
-Modified by BushWookie & Forgotten for Epoch
-Modified by f3cuk for Epoch 1051
-Script Version: 1.3.1
+	Script Name: animated_crash_spawner.sqf
+	Original Author: Grafzahl / Finest
+	Modified by BushWookie & Forgotten for Epoch
+	Modified by f3cuk for Epoch 1051
+	Script Version: 1.3.1
 */
  
 private["_show_name", "_show_marker", "_finder","_timeAdjust","_timeToSpawn","_spawnRoll","_crash","_hasAdjustment","_newHeight","_adjustedPos","_useStatic","_crashDamage","_lootRadius","_preWaypoints","_preWaypointPos","_endTime","_startTime","_safetyPoint","_heliStart","_deadBody","_exploRange","_heliModel","_lootPos","_list","_craters","_dummy","_wp2","_wp3","_landingzone","_aigroup","_wp","_helipilot","_crash","_crashwreck","_smokerand","_staticcoords","_pos","_dir","_position","_num","_config","_itemType","_itemChance","_weights","_index","_iArray","_crashModel","_lootTable","_guaranteedLoot","_randomizedLoot","_frequency","_variance","_spawnChance","_spawnMarker","_spawnRadius","_spawnFire","_permanentFire","_crashName","_marker", "_markerRadius","_hint","_itemTypes"];
@@ -20,10 +20,11 @@ _minLootRadius			= 4;				// Minimum distance for loot to spawn from the crash si
 _maxLootRadius			= 10;				// Maximum distance for loot to spawn from the crash site in meters
 _lootTable				= "HeliCrash";		// Name of the loot table the heli gets loot from (DO NOT edit unless you know what your doing)
 _markerRadius			= 400;				// Radius for the marker
-_plane					= false;
-_show_marker			= true;
-_show_name				= true;
+_show_marker			= true;				// Show a marker on the map
+_show_name				= true;				// Add the crashname to the marker
 
+/* do not change below values if you do not know what you are doing */
+_plane					= false;
 _spawnMarker 			= "center";
 _heliModel				= ["UH1Y_DZE","UH1H_DZE","MV22","Mi17_DZ","UH60M_EP1","UH1H_TK_EP1","UralWreck","UH60M_EP1","UH1H_TK_EP1","UH60M_MEV_EP1","A10","Ka52Black","Mi24_D","AH1Z","AV8B","Su25_TK_EP1"] call BIS_fnc_selectRandom;
 _crashModel				= "UH1Wreck_DZ";
