@@ -3,7 +3,7 @@
 	Original Author: Grafzahl / Finest
 	Modified by BushWookie & Forgotten for Epoch
 	Modified by f3cuk for Epoch 1051
-	Script Version: 1.3.1
+	Script Version: 1.3.2
 */
  
 private["_show_name","_show_marker", "_finder","_timeAdjust","_timeToSpawn","_spawnRoll","_crash","_hasAdjustment","_newHeight","_adjustedPos","_useStatic","_crashDamage","_lootRadius","_preWaypoints","_preWaypointPos","_endTime","_startTime","_safetyPoint","_heliStart","_deadBody","_exploRange","_heliModel","_lootPos","_list","_craters","_dummy","_wp2","_wp3","_landingzone","_aigroup","_wp","_helipilot","_crash","_crashwreck","_smokerand","_staticcoords","_pos","_dir","_mdot","_position","_num","_config","_itemType","_itemChance","_weights","_index","_iArray","_crashModel","_lootTable","_guaranteedLoot","_randomizedLoot","_frequency","_variance","_spawnChance","_spawnMarker","_spawnRadius","_spawnFire","_permanentFire","_crashName","_marker", "_markerRadius","_hint","_itemTypes"];
