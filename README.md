@@ -71,7 +71,7 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 	
 7. Repack your mission PBO
 
-Options: You can configure the animated crash spawner with the following block of defines and variables.
+	Options: You can configure the animated crash spawner with the following block of defines and variables.
 
 	```sqf
 	// Configs - You can adjust these
@@ -103,7 +103,7 @@ You can also configure the blacklist for each map if you don't want crashes to l
 
 Add coordinates like has been added to the Chernarus entry. The explanation for blacklist is found in ***[BIS_fnc_selectRandom](https://community.bistudio.com/wiki/BIS_fnc_findSafePos)***
 
-This server event uses ***[This Crashsite Loot Table](https://github.com/EpochModTeam/DayZ-Epoch/blob/master/SQF/dayz_code/Configs/CfgLoot/Groups/CrashSite.hpp)*** Every crash spawn chooses on of the groups at random. If you want custom loot then you can customize the loot in this file.
+This server event uses ***[This Crashsite Loot Table](https://github.com/EpochModTeam/DayZ-Epoch/blob/master/SQF/dayz_code/Configs/CfgLoot/Groups/CrashSite.hpp)*** Every crash spawn chooses one of the groups at random. If you want custom loot then you can customize the loot in this file.
 
 ###Credits
 
