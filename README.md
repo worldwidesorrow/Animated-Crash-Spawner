@@ -95,7 +95,7 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 	
 	
 	
-You can also configure the blacklist for each map if you don't want crashes to land in certain areas of the map. Each of the maps in listed in the call function has an entry like this:
+	You can also configure the blacklist for each map if you don't want crashes to land in certain areas of the map. Each of the maps in listed in the call function has an entry like this:
 
 	```sqf
 	_blackList = [];
