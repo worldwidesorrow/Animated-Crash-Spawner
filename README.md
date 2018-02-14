@@ -95,13 +95,13 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 	
 	
 	
-	You can also configure the blacklist for each map if you don't want crashes to land in certain areas of the map. Each of the maps in listed in the call function has an entry like this:
+	You can also configure the blacklist for each map if you don't want crashes to land in certain areas of the map. Each of the maps listed in the call function has an entry like this:
 
 	```sqf
 	_blackList = [];
 	```
 
-Add coordinates like has been added to the Chernarus entry. The explanation for blacklist is found in ***[BIS_fnc_selectRandom](https://community.bistudio.com/wiki/BIS_fnc_findSafePos)***
+Add coordinates similar to the Chernarus entry. The explanation for blacklist is found in ***[BIS_fnc_selectRandom](https://community.bistudio.com/wiki/BIS_fnc_findSafePos)***
 
 This server event uses ***[This Crashsite Loot Table](https://github.com/EpochModTeam/DayZ-Epoch/blob/master/SQF/dayz_code/Configs/CfgLoot/Groups/CrashSite.hpp)*** Every crash spawn chooses one of the groups at random. If you want custom loot then you can customize the loot in this file.
 
