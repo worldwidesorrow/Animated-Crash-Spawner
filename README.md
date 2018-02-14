@@ -105,7 +105,8 @@ Add coordinates similar to the Chernarus entry. The explanation for blacklist is
 
 This server event uses ***[This Crashsite Loot Table](https://github.com/EpochModTeam/DayZ-Epoch/blob/master/SQF/dayz_code/Configs/CfgLoot/Groups/CrashSite.hpp)*** Every crash spawn chooses one of the groups at random. If you want custom loot then you can customize the loot in this file.
 
-###Credits
+
+### Credits
 
 Credits are listed in the animated_crash_spawner.sqf file itself and additional credits were given to Richie and BetterDeadThanZed by F3cuk for heli start points on maps other than Chernarus.
 		
