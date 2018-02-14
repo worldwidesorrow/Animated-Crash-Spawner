@@ -40,7 +40,7 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 
 5. Unpack your mission PBO
 
-6. Edit init.sqf with notepad++
+6. Edit ***init.sqf*** with notepad++
 
 	Find this line:
 	
@@ -93,7 +93,7 @@ Options: You can configure the animated crash spawner with the following block o
 	_exploRange				= 200;	// How far away from the predefined crash point should the heli start crashing
 	```
 	
-	Just change the values behind each of the defines or variables.
+	
 	
 You can also configure the blacklist for each map if you don't want crashes to land in certain areas of the map. Each of the maps in listed in the call function has an entry like this:
 
