@@ -7,7 +7,7 @@
 	Script Version: 1.3.3
 */
  
-private["_exploRange","_blackList","_lootArray","_crashSelect","_ran15","_missionEnd","_isClose1","_isClose2","_isClose3","_inFlight","_plane","_porh","_lootVeh","_finder","_crash","_crashDamage","_preWaypointPos","_endTime","_startTime","_heliStart","_heliModel","_lootPos","_wp2","_landingzone","_aigroup","_wp","_helipilot","_crashwreck","_pos","_dir","_mdot","_position","_num","_crashModel","_crashName","_marker","_itemTypes"];
+private["_messageType","_exploRange","_blackList","_lootArray","_crashSelect","_ran15","_missionEnd","_isClose1","_isClose2","_isClose3","_inFlight","_plane","_porh","_lootVeh","_finder","_crash","_crashDamage","_preWaypointPos","_endTime","_startTime","_heliStart","_heliModel","_lootPos","_wp2","_landingzone","_aigroup","_wp","_helipilot","_crashwreck","_pos","_dir","_mdot","_position","_num","_crashModel","_crashName","_marker","_itemTypes"];
 
 #include "\z\addons\dayz_code\loot\Loot.hpp"
 
@@ -28,6 +28,7 @@ private["_exploRange","_blackList","_lootArray","_crashSelect","_ran15","_missio
 #define LOWER_GRASS		true	// lowers the grass around the loot
 _crashDamage			= 1;	// Amount of damage the heli can take before crashing (between 0.1 and 1) Lower the number and the heli can take less damage before crashing 1 damage is fully destroyed and 0.1 something like a DMR could one shot the heli
 _exploRange				= 200;	// How far away from the predefined crash point should the heli start crashing
+_messageType = "TitleText"; 	// Type of announcement message. Options "Hint","TitleText". ***Warning: Hint appears in the same screen space as common debug monitors
 
 //Parameters for finding a suitable position to spawn the crash site
 #define SEARCH_CENTER getMarkerPos "crashsites"
@@ -49,7 +50,7 @@ _crashSelect = [["UH1Y_DZE","UH1YWreck",false],["MV22","MV22Wreck",false],["Mi17
 _heliModel	 = _crashSelect select 0;
 _crashModel	 = _crashSelect select 1;
 _plane		 = _crashSelect select 2;
-_porh		 = "helicopter";
+_porh		 = "Heli";
 _crashName	 = getText (configFile >> "CfgVehicles" >> _heliModel >> "displayName");
 #define SPAWN_ROLL round(random 100)
 
@@ -71,10 +72,18 @@ if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: %1%2 chance to start a cras
 if (SPAWN_ROLL <= SPAWN_CHANCE) then
 {
 	if(_plane) then {
-		_porh = "plane";
+		_porh = "Plane";
 	};
 	
-	[nil,nil,rTitleText,format["A %1 is in distress! Watch for it and go to the crash site to secure the loot!",_porh], "PLAIN",10] call RE;
+	if (_messageType == "Hint") then {
+		_image = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
+		_hint = "STR_CL_ACS_ANNOUNCE_HINT";
+		RemoteMessage = ["hint", _hint, [_porh, _image]];
+	} else {
+		_message = "STR_CL_ACS_ANNOUNCE";
+		RemoteMessage = ["titleText",_message, [_porh]];
+	};
+	publicVariable "RemoteMessage";
 	
 	_position = [SEARCH_CENTER, 0, SEARCH_RADIUS, SEARCH_DIST_MIN, 0, SEARCH_SLOPE_MAX, 0, _blackList] call BIS_fnc_findSafePos; //SEARCH_BLACKLIST
 	_position set [2, 0];
@@ -189,7 +198,15 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 	
 	if(_isWater) then
 	{
-		[nil,nil,rTitleText,format["The %1 has crashed into the water, no loot can be secured",_porh], "PLAIN",10] call RE;
+		if (_messageType == "Hint") then {
+			_image = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
+			_hint = "STR_CL_ACS_WATERCRASH_HINT";
+			RemoteMessage = ["hint", _hint, [_porh, _image]];
+		} else {
+			_message = "STR_CL_ACS_WATERCRASH";
+			RemoteMessage = ["titleText",_message, [_porh]];
+		};
+		publicVariable "RemoteMessage";
 	}
 	else
 	{
@@ -224,7 +241,15 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 		_endTime = time - _startTime;
 		_startTime = time;
 
-		[nil,nil,rTitleText,format["The %1 has crashed, go and secure the loot!",_porh], "PLAIN",10] call RE;
+		if (_messageType == "Hint") then {
+			_image = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
+			_hint = "STR_CL_ACS_CRASH_HINT";
+			RemoteMessage = ["hint", _hint, [_porh, _image]];
+		} else {
+			_message = "STR_CL_ACS_CRASH";
+			RemoteMessage = ["titleText",_message, [_porh]];
+		};
+		publicVariable "RemoteMessage";
 		
 		if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: Crash completed! Wreck at: %2 - Runtime: %1 Seconds || Distance from calculated POC: %3 meters", round(_endTime), str(_pos), round(_position distance _crash)]);};
 		
@@ -257,7 +282,17 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 				deleteVehicle _crash;
 				{deleteVehicle _x;} forEach _lootArray;
 				{deleteVehicle _x;} forEach nearestObjects [_pos, ["CraterLong"], 15];
-				[nil,nil,rTitleText,format["Survivors did not secure the %1 crash site!",_crashName], "PLAIN",10] call RE;
+				
+				if (_messageType == "Hint") then {
+					_image = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
+					_hint = "STR_CL_ACS_TIMEOUT_HINT";
+					RemoteMessage = ["hint", _hint, [_porh, _image]];
+				} else {
+					_message = "STR_CL_ACS_TIMEOUT";
+					RemoteMessage = ["titleText",_message, [_porh]];
+				};
+				publicVariable "RemoteMessage";
+				
 				if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: The %1 Crash timed out, removing the marker and mission objects",_crashName]);};
 				_missionEnd = true;
 			};
@@ -266,7 +301,17 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 				if((isPlayer _x) && (_x distance _pos <= 25)) then
 				{
 					_finder = name _x;
-					[nil,nil,rTitleText,format["Survivors have secured the crash site!"], "PLAIN",10] call RE;
+					
+					if (_messageType == "Hint") then {
+						_image = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
+						_hint = "STR_CL_ACS_SUCCESS_HINT";
+						RemoteMessage = ["hint", _hint, [_porh, _image]];
+					} else {
+						_message = "STR_CL_ACS_SUCCESS";
+						RemoteMessage = ["titleText",_message, [_porh]];
+					};
+					publicVariable "RemoteMessage";
+					
 					if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: Crash found by %1, removing the marker" , _finder]);};
 					_missionEnd = true;
 				};
