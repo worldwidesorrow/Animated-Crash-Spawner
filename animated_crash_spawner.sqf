@@ -96,15 +96,12 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 	_crashwreck 		engineOn true;
 	_crashwreck 		flyInHeight 150;
 
-	if (_plane) then
-	{
+	if (_plane) then {
 		_crashDamage = .5;
 		_crashwreck setDamage .4;
 		_crashwreck forceSpeed 250;
 		_crashwreck setspeedmode "LIMITED";
-	}
-	else
-	{
+	} else {
 		_crashwreck forceSpeed 150;
 		_crashwreck setspeedmode "NORMAL";
 	};
@@ -134,37 +131,29 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 	_wp2 	setWaypointBehaviour "CARELESS";
 	_wp2 	setWaypointStatements ["true", "_crashwreck setDamage 1;"];
 	
-	while {_inFlight} do 
-	{
-		if ((_crashwreck distance _position) <= 1000 && !_isClose1) then 
-		{
-			if (_plane) then
-			{
+	while {_inFlight} do {
+		if ((_crashwreck distance _position) <= 1000 && !_isClose1) then {
+			if (_plane) then {
 				_crashwreck flyInHeight 100;
 				_crashwreck forceSpeed 150;
 				_crashwreck setspeedmode "NORMAL";
 				_exploRange = 360;
-			}
-			else
-			{
+			} else {
 				_crashwreck flyInHeight 100;
 				_crashwreck forceSpeed 100;
 				_crashwreck setspeedmode "NORMAL";
 			};
 			_isClose1 = true;
 		};
-		if ((_crashwreck distance _position) <= _exploRange && !_isClose2) then
-		{
-			if (_plane) then
-			{
+		
+		if ((_crashwreck distance _position) <= _exploRange && !_isClose2) then {
+			if (_plane) then {
 				_crashwreck 	setDamage 1;
 				_vel 			= velocity _crashwreck;
 				_dir 			= direction _crashwreck;
 				_speed 			= 100;
 				_crashwreck 	setVelocity [(_vel select 0)-(sin _dir*_speed),(_vel select 1)-(cos _dir*_speed),(_vel select 2) - 30];
-			}
-			else
-			{
+			} else {
 				_crashwreck 	setHit ["mala vrtule", 1];
 				_ran15 			= random 15;
 				_crashwreck 	setVelocity [_ran15,_ran15,-25];
@@ -172,32 +161,32 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 			};
 			_isClose2 = true;
 		};
-		if (getPos _crashwreck select 2 <= 30 && !_isClose3) then
-		{
-		_crashwreck 	setVelocity [_ran15,_ran15,-20];
-		_isClose3 = true;
+		
+		if (getPos _crashwreck select 2 <= 30 && !_isClose3) then {
+			_crashwreck 	setVelocity [_ran15,_ran15,-20];
+			_isClose3 = true;
 		};
-		if (getPos _crashwreck select 2 <= 5) then
-		{
-		deleteVehicle 		_helipilot;
-		_crashwreck 	setDamage 1;
-		_inFlight = false;
+		
+		if (getPos _crashwreck select 2 <= 5) then {
+			deleteVehicle 		_helipilot;
+			_crashwreck 	setDamage 1;
+			_inFlight = false;
 		};
+		
 		uiSleep 1;
 	};
 	
 	if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: %1 just crashed at %2!", _crashName, getPos _crashwreck]);};
 	
-	_pos 				= [getPos _crashwreck select 0, getPos _crashwreck select 1,0];
-	_dir 				= getDir _crashwreck;
+	_pos = [getPos _crashwreck select 0, getPos _crashwreck select 1,0];
+	_dir = getDir _crashwreck;
 
-	deleteVehicle 		_crashwreck;
-	deleteVehicle 		_landingzone;
+	deleteVehicle _crashwreck;
+	deleteVehicle _landingzone;
 	
 	_isWater = surfaceIsWater [getPos _crashwreck select 0, getPos _crashwreck select 1];
 	
-	if(_isWater) then
-	{
+	if(_isWater) then {
 		if (_messageType == "Hint") then {
 			_image = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
 			_hint = "STR_CL_ACS_WATERCRASH_HINT";
@@ -207,14 +196,11 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 			RemoteMessage = ["titleText",_message, [_porh]];
 		};
 		publicVariable "RemoteMessage";
-	}
-	else
-	{
+	} else {
 		_crash = createVehicle [_crashModel, _pos, [], 0, "CAN_COLLIDE"];
 		_crash setDir _dir;
 		
-		if (SPAWN_FIRE) then
-		{
+		if (SPAWN_FIRE) then {
 			PVDZ_obj_Fire = [_crash, 4, time, false, FADE_FIRE];
 			publicVariable "PVDZ_obj_Fire";
 		};
@@ -223,6 +209,7 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 		
 		_itemTypes = Loot_SelectSingle(Loot_GetGroup("CrashSiteType"));
 		_lootGroup = Loot_GetGroup(_itemTypes select 2);
+		
 		{
 			_maxLootRadius 	= (random MAX_LOOT_RADIUS) + MIN_LOOT_RADIUS;
 			_lootPos 		= [_pos, _maxLootRadius, random 360] call BIS_fnc_relPos;
@@ -255,10 +242,8 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 		
 		_marker_position = [_pos,0,MARKER_RADIUS,0,1,2000,0] call BIS_fnc_findSafePos;
 		
-		while {!_missionEnd} do
-		{
-			if(SHOW_MARKER) then
-			{
+		while {!_missionEnd} do {
+			if(SHOW_MARKER) then {
 				_marker = createMarker [ format ["loot_event_marker_%1", _startTime], _marker_position];
 				_marker setMarkerShape "ELLIPSE";
 				_marker setMarkerColor "ColorYellow";
@@ -266,19 +251,16 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 				_marker setMarkerSize [(MARKER_RADIUS + 50), (MARKER_RADIUS + 50)];
 				_marker setMarkerText _crashName;
 				
-				if(MARKER_NAME) then
-				{
+				if(MARKER_NAME) then {
 					_mdot 	= createMarker [format ["dot_%1", _startTime], _marker_position];
 					_mdot 	setMarkerColor "ColorBlack";
 					_mdot 	setMarkerType "mil_dot";
 					_mdot 	setMarkerText _crashName;
-					
 				};
 				uiSleep 3; deleteMarker _marker; if(MARKER_NAME) then {deleteMarker _mdot;};
 			};
 			
-			if ((time - _startTime) >= CRASH_TIMEOUT) then
-			{
+			if ((time - _startTime) >= CRASH_TIMEOUT) then {
 				deleteVehicle _crash;
 				{deleteVehicle _x;} forEach _lootArray;
 				{deleteVehicle _x;} forEach nearestObjects [_pos, ["CraterLong"], 15];
@@ -298,8 +280,7 @@ if (SPAWN_ROLL <= SPAWN_CHANCE) then
 			};
 			
 			{
-				if((isPlayer _x) && (_x distance _pos <= 25)) then
-				{
+				if((isPlayer _x) && (_x distance _pos <= 25)) then {
 					_finder = name _x;
 					
 					if (_messageType == "Hint") then {
