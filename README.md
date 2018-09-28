@@ -60,7 +60,7 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 	EpochEvents = [["any","any","any","any",30,"crash_spawner"],["any","any","any","any",0,"crash_spawner"],["any","any","any","any",15,"supply_drop"]];
 	```
 	
-	Replace it with this:
+	Replace it with this. If you already have other entries work these in.
 	
 	```sqf
 	EpochEvents = [["any","any","any","any",5,"animated_crash_spawner"],["any","any","any","any",35,"animated_crash_spawner"]];
@@ -69,7 +69,11 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 	This will spawn an animated heli/plane crash every 30 minutes while your server is online. The first will start after the server has been online for 5 minutes.
 	Note: The old Epoch crash_spawner and supply_drop events are no longer being used in DayZ Epoch 1.0.6+ so we remove them from the EpochEvents array.
 	
-7. Repack your mission PBO
+7. Copy the ***dayz_code*** folder over to your mission folder.
+
+8. This mod is dependent on the Epoch community stringtable. Download the stringtable ***[here](https://github.com/oiad/communityLocalizations/)*** and place file stringTable.xml in the root of your mission folder.
+	
+9. Repack your mission PBO
 
 	Options: You can configure the animated crash spawner with the following block of defines and variables.
 
