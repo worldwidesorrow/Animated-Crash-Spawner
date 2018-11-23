@@ -52,7 +52,7 @@ _crashName = getText (configFile >> "CfgVehicles" >> _heliModel >> "displayName"
 _img = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
 
 if (_messageType == "Hint") then {
-	RemoteMessage = ["event_hint",["STR_CL_ACS_TITLE",["STR_CL_ACS_ANNOUNCE",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
+	RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_ANNOUNCE",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
 } else {
 	RemoteMessage = ["titleText",["STR_CL_ACS_ANNOUNCE",_crashName]];
 };
@@ -167,7 +167,7 @@ _isWater = surfaceIsWater [getPos _crashwreck select 0, getPos _crashwreck selec
 if(_isWater) then {
 	
 	if (_messageType == "Hint") then {
-		RemoteMessage = ["event_hint",["STR_CL_ACS_TITLE",["STR_CL_ACS_WATERCRASH",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
+		RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_WATERCRASH",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
 	} else {
 		RemoteMessage = ["titleText",["STR_CL_ACS_WATERCRASH",_crashName]];
 	};
@@ -207,7 +207,7 @@ if(_isWater) then {
 	_time = time;
 	
 	if (_messageType == "Hint") then {
-		RemoteMessage = ["event_hint",["STR_CL_ACS_TITLE",["STR_CL_ACS_CRASH",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
+		RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_CRASH",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
 	} else {
 		RemoteMessage = ["titleText",["STR_CL_ACS_CRASH",_crashName]];
 	};
@@ -247,7 +247,7 @@ if(_isWater) then {
 			{deleteVehicle _x;} count _lootArray;
 			
 			if (_messageType == "Hint") then {
-				RemoteMessage = ["event_hint",["STR_CL_ACS_TITLE",["STR_CL_ACS_TIMEOUT",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
+				RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_TIMEOUT",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
 			} else {
 				RemoteMessage = ["titleText",["STR_CL_ACS_TIMEOUT",_crashName]];
 			};
@@ -262,7 +262,7 @@ if(_isWater) then {
 				_finder = name _x;
 				
 				if (_messageType == "Hint") then {
-					RemoteMessage = ["event_hint",["STR_CL_ACS_TITLE",["STR_CL_ACS_SUCCESS",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
+					RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_SUCCESS",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
 				} else {
 					RemoteMessage = ["titleText",["STR_CL_ACS_SUCCESS",_crashName]];
 				};
