@@ -70,6 +70,7 @@ if (DEBUG_MODE) then {diag_log format["CRASHSPAWNER: %1 started flying from %2 t
 
 _time = time;
 _crashwreck = createVehicle [_heliModel,_heliStart, [], 0, "FLY"];
+_crashwreck setPos _heliStart;
 dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_crashwreck];
 _crashwreck engineOn true;
 _crashwreck flyInHeight 150;
