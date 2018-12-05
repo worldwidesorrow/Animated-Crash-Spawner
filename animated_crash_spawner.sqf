@@ -33,6 +33,7 @@ _startDist = 4000; // increase this to delay the time it takes for the plane to 
 #define TITLE_COLOR "#00FF11" // Hint Option: Color of Top Line
 #define TITLE_SIZE "2" // Hint Option: Size of top line
 #define IMAGE_SIZE "4" // Hint Option: Size of the image
+#define SEARCH_BLACKLIST [[[2092,14167],[10558,12505]]]
 
 // Initialize mission variables - DO NOT CHANGE THESE
 _ran15 = 0;
@@ -58,7 +59,7 @@ if (_messageType == "Hint") then {
 };
 publicVariable "RemoteMessage";
 
-_pos = [getMarkerPos "crashsites", 0, (getMarkerSize "crashsites") select 0, 20, 0, .3, 0] call BIS_fnc_findSafePos;
+_pos = [getMarkerPos "crashsites", 0, (getMarkerSize "crashsites") select 0, 20, 0, .3, 0, SEARCH_BLACKLIST] call BIS_fnc_findSafePos;
 _pos set [2, 0];
 
 _PorM = if (random 1 > .5) then {"+"} else {"-"};
