@@ -1,9 +1,10 @@
 Animated Crash Spawner v1.3.3
 ==============
 
-I always thought this was a cool server event so I updated it for DayZ Epoch/Overpoch 1.0.6.2, gave it some code optimization, and added some new features.
+I always thought this was a cool server event so I updated it for DayZ Epoch 1.0.6.2, gave it some code optimization, and added some new features.
+Updated for DayZ Epoch 1.0.7 on 5-31-2021.
 
-### Updates for DayZ Epoch/Overpoch 1.0.6.2.
+### Updates for DayZ Epoch 1.0.6.2.
 * Updated to utilize the new 1.0.6+ loot tables.
 * Debug mode enables or disables server rpt diagnostic logs.
 * Adjustable mission timeout.
@@ -12,7 +13,7 @@ I always thought this was a cool server event so I updated it for DayZ Epoch/Ove
 * Automatically detects the map that you are using and adjusts accordingly.
 * Configurable blacklist per map.
 
-This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana, Napf, Sauerland, and Takistan.
+### Updated for DayZ Epoch 1.0.7.
 
 ### Install Instructions
 
@@ -22,60 +23,39 @@ This mod works with maps: Chernarus, Lingor, Sahrani, Panthera, Namalsk, Taviana
 	
 2. Unpack your server PBO and place file ***animated_crash_spawner.sqf*** in directory ***dayz_server\modules***
 
-3. Since you are installing animated crashes, I recommend that you disable the DayZ Vanilla crash spawner. To do this, edit file ***dayz_server\system\server_monitor.sqf*** with notepad++
+3. Save the file and repack your server PBO
 
-	Find this line:
+4. Unpack your mission PBO
+
+5. Open ***init.sqf***
+
+	Find this block of code:
 	
 	```sqf
-	[] execVM "\z\addons\dayz_server\compile\server_spawnCrashSites.sqf";
+	EpochEvents = [ //[year,month,day of month, minutes,name of file - .sqf] If minutes is set to -1, the event will run once immediately after server start.
+		//["any","any","any","any",-1,"Infected_Camps"], // (negatively impacts FPS)
+		["any","any","any","any",-1,"Care_Packages"],
+		["any","any","any","any",-1,"CrashSites"]
+	];
 	```
 	
-	and comment it out so it looks like this:
+	Add entries to spawn the animated crash spawner like this:
 	
 	```sqf
-	//[] execVM "\z\addons\dayz_server\compile\server_spawnCrashSites.sqf";
-	```
-
-4. Save the file and repack your server PBO
-
-5. Unpack your mission PBO
-
-6. Edit ***init.sqf*** with notepad++
-
-	Find this line:
-	
-	```sqf
-	EpochUseEvents = false;
+	EpochEvents = [ //[year,month,day of month, minutes,name of file - .sqf] If minutes is set to -1, the event will run once immediately after server start.
+		//["any","any","any","any",-1,"Infected_Camps"], // (negatively impacts FPS)
+		["any","any","any","any",-1,"Care_Packages"],
+		["any","any","any","any",-1,"CrashSites"],
+		["any","any","any","any",5,"animated_crash_spawner"],
+		["any","any","any","any",35,"animated_crash_spawner"]
+	];
 	```
 	
-	Change it to true, if not already:
+	This will spawn an animated heli/plane crash every 30 minutes while your server is online. The first will spawn at 5 minutes past the hour. Adjust and add entries as desired.
 	
-	```sqf
-	EpochUseEvents = true;
-	```
-	
-	Find this line right below:
-	
-	```sqf
-	EpochEvents = [["any","any","any","any",30,"crash_spawner"],["any","any","any","any",0,"crash_spawner"],["any","any","any","any",15,"supply_drop"]];
-	```
-	
-	Replace it with this. If you already have other entries work these in.
-	
-	```sqf
-	EpochEvents = [["any","any","any","any",5,"animated_crash_spawner"],["any","any","any","any",35,"animated_crash_spawner"]];
-	```
-	
-	This will spawn an animated heli/plane crash every 30 minutes while your server is online. The first will start after the server has been online for 5 minutes.
-	Note: The old Epoch crash_spawner and supply_drop events are no longer being used in DayZ Epoch 1.0.6+ so we remove them from the EpochEvents array.
-	
-7. Copy the ***dayz_code*** folder over to your mission folder.
+6. Repack your mission PBO
 
-8. This mod is dependent on the Epoch community stringtable. Download the stringtable ***[here](https://github.com/oiad/communityLocalizations/)*** and place file stringTable.xml in the root of your mission folder.
-	
-9. Repack your mission PBO
-
-	Options: You can configure the animated crash spawner with the following block of defines and variables.
+	Options: You can configure the animated crash spawner with the following block of defines and variables near the top of the file.
 
 	```sqf
 	// Configs - You can adjust these
@@ -112,7 +92,11 @@ This server event uses ***[This Crashsite Loot Table](https://github.com/EpochMo
 
 ### Credits
 
-Credits are listed in the animated_crash_spawner.sqf file itself and additional credits were given to Richie and BetterDeadThanZed by F3cuk for heli start points on maps other than Chernarus.
+Original Author: Grafzahl / Finest
+Modified by BushWookie & Forgotten for Epoch
+Modified by f3cuk for Epoch 1.0.5.1
+Modified by JasonTM for Epoch 1.0.6.2
+Modified by JasonTM for Epoch 1.0.7
 		
 
 

@@ -2,13 +2,12 @@
 	Script Name: animated_crash_spawner.sqf
 	Original Author: Grafzahl / Finest
 	Modified by BushWookie & Forgotten for Epoch
-	Modified by f3cuk for Epoch 1051
-	Modified by JasonTM for Epoch 1062
-	Script Version: 1.3.3
-	Last update: 11-15-2018
+	Modified by f3cuk for Epoch 1.0.5.1
+	Modified by JasonTM for Epoch 1.0.6.2
+	Modified by JasonTM for Epoch 1.0.7
+	Script Version: 1.3.4
+	Last update: 05-31-2021
 */
-
-private["_lootArray","_lootVeh","_finder","_crash","_preWaypointPos","_endTime","_time","_heliStart","_lootPos","_wp2","_landingzone","_aigroup","_wp","_pilot","_crashwreck","_pos","_dir","_mdot","_pos","_num","_marker","_itemTypes"];
 
 #include "\z\addons\dayz_code\loot\Loot.hpp"
 
@@ -26,31 +25,31 @@ private["_lootArray","_lootVeh","_finder","_crash","_preWaypointPos","_endTime",
 #define SHOW_MARKER	true // Show a marker on the map
 #define MARKER_NAME true // Add the crash name to the marker, SHOW_MARKER must be true
 #define LOWER_GRASS	true // lowers the grass around the loot
-_crashDamage = 1; // Amount of damage the heli can take before crashing (between 0.1 and 1) Lower the number and the heli can take less damage before crashing 1 damage is fully destroyed and 0.1 something like a DMR could one shot the heli
-_exploRange	= 200; // How far away from the predefined crash point should the heli start crashing
-_messageType = "TitleText"; // Type of announcement message. Options "Hint","TitleText". ***Warning: Hint appears in the same screen space as common debug monitors
-_startDist = 4000; // increase this to delay the time it takes for the plane to arrive at the mission
+local _crashDamage = 1; // Amount of damage the heli can take before crashing (between 0.1 and 1) Lower the number and the heli can take less damage before crashing 1 damage is fully destroyed and 0.1 something like a DMR could one shot the heli
+local _exploRange	= 200; // How far away from the predefined crash point should the heli start crashing
+local _messageType = "TitleText"; // Type of announcement message. Options "Hint","TitleText". ***Warning: Hint appears in the same screen space as common debug monitors
+local _startDist = 4000; // increase this to delay the time it takes for the plane to arrive at the mission
 #define TITLE_COLOR "#00FF11" // Hint Option: Color of Top Line
 #define TITLE_SIZE "2" // Hint Option: Size of top line
 #define IMAGE_SIZE "4" // Hint Option: Size of the image
 #define SEARCH_BLACKLIST [[[2092,14167],[10558,12505]]]
 
 // Initialize mission variables - DO NOT CHANGE THESE
-_ran15 = 0;
-_isClose1 = false;
-_isClose2 = false;
-_isClose3 = false;
-_inFlight = true;
-_end = false;
-_lootArray = [];
+local _ran15 = 0;
+local _isClose1 = false;
+local _isClose2 = false;
+local _isClose3 = false;
+local _inFlight = true;
+local _end = false;
+local _lootArray = [];
 
 // Do not change below values if you do not know what you are doing
-_select = [["UH1Y_DZE","UH1YWreck",false],["MV22","MV22Wreck",false],["Mi17_DZ","Mi17Wreck",false],["UH60M_EP1","MH60Wreck",false],["UH60M_MEV_EP1","MH60Wreck",false],["A10","A10Wreck",true],["Ka52Black","Ka52Wreck",false],["Mi24_D","Mi24Wreck",false],["AH1Z","AH1ZWreck",false],["AV8B","AV8BWreck",true],["Su25_TK_EP1","SU25Wreck",true]] call BIS_fnc_selectRandom;
-_heliModel = _select select 0;
-_crashModel	= _select select 1;
-_plane = _select select 2;
-_crashName = getText (configFile >> "CfgVehicles" >> _heliModel >> "displayName");
-_img = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
+local _select = [["UH1Y_DZE","UH1YWreck",false],["MV22","MV22Wreck",false],["Mi17_DZ","Mi17Wreck",false],["UH60M_EP1","MH60Wreck",false],["UH60M_MEV_EP1","MH60Wreck",false],["A10","A10Wreck",true],["Ka52Black","Ka52Wreck",false],["Mi24_D","Mi24Wreck",false],["AH1Z","AH1ZWreck",false],["AV8B","AV8BWreck",true],["Su25_TK_EP1","SU25Wreck",true]] call BIS_fnc_selectRandom;
+local _heliModel = _select select 0;
+local _crashModel	= _select select 1;
+local _plane = _select select 2;
+local _crashName = getText (configFile >> "CfgVehicles" >> _heliModel >> "displayName");
+local _img = (getText (configFile >> "CfgVehicles" >> _heliModel >> "picture"));
 
 if (_messageType == "Hint") then {
 	RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_ANNOUNCE",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
@@ -59,17 +58,17 @@ if (_messageType == "Hint") then {
 };
 publicVariable "RemoteMessage";
 
-_pos = [getMarkerPos "crashsites", 0, (getMarkerSize "crashsites") select 0, 20, 0, .3, 0, SEARCH_BLACKLIST] call BIS_fnc_findSafePos;
+local _pos = [getMarkerPos "crashsites", 0, (getMarkerSize "crashsites") select 0, 20, 0, .3, 0, SEARCH_BLACKLIST] call BIS_fnc_findSafePos;
 _pos set [2, 0];
 
-_PorM = if (random 1 > .5) then {"+"} else {"-"};
-_PorM2 = if (random 1 > .5) then {"+"} else {"-"};
-_heliStart = call compile format ["[(%1 select 0) %2 %4,(%1 select 1) %3 %4, 400]",_pos,_PorM,_PorM2,_startDist];
+local _PorM = if (random 1 > .5) then {"+"} else {"-"};
+local _PorM2 = if (random 1 > .5) then {"+"} else {"-"};
+local _heliStart = call compile format ["[(%1 select 0) %2 %4,(%1 select 1) %3 %4, 400]",_pos,_PorM,_PorM2,_startDist];
 
 if (DEBUG_MODE) then {diag_log format["CRASHSPAWNER: %1 started flying from %2 to %3 NOW!(TIME:%4)", _crashName,_heliStart,_pos,round(time)];};
 
-_time = time;
-_crashwreck = createVehicle [_heliModel,_heliStart, [], 0, "FLY"];
+local _time = time;
+local _crashwreck = createVehicle [_heliModel,_heliStart, [], 0, "FLY"];
 _crashwreck setPos _heliStart;
 dayz_serverObjectMonitor set [count dayz_serverObjectMonitor,_crashwreck];
 _crashwreck engineOn true;
@@ -85,13 +84,18 @@ if (_plane) then {
 	_crashwreck setSpeedMode "NORMAL";
 };
 
-_landingzone = "HeliHEmpty" createVehicle [0,0,0];
+local _landingzone = "HeliHEmpty" createVehicle [0,0,0];
 _landingzone setPos _pos;
-_aigroup = createGroup civilian;
-_pilot = _aigroup createUnit ["SurvivorW2_DZ",getPos _crashwreck,[],0,"FORM"];
+local _aigroup = createGroup civilian;
+local _pilot = _aigroup createUnit ["SurvivorW2_DZ",getPos _crashwreck,[],0,"FORM"];
 _pilot setCombatMode "BLUE";
 _pilot moveInDriver _crashwreck;
 _pilot assignAsDriver _crashwreck;
+local _wp = [];
+local _vel = [];
+local _dir = 0;
+local _speed = 0;
+local _crash = objNull;
 
 uiSleep 0.5;
 
@@ -99,7 +103,7 @@ if(PREWAYPOINTS > 0) then
 {
 	for "_x" from 1 to PREWAYPOINTS do
 	{
-		_preWaypointPos = [getMarkerPos "crashsites",0,(getMarkerSize "crashsites") select 0,10,0,2000,0] call BIS_fnc_findSafePos;
+		local _preWaypointPos = [getMarkerPos "crashsites",0,(getMarkerSize "crashsites") select 0,10,0,2000,0] call BIS_fnc_findSafePos;
 		_wp = _aigroup addWaypoint [_preWaypointPos, 0];
 		_wp setWaypointType "MOVE";
 		_wp setWaypointBehaviour "CARELESS";
@@ -164,7 +168,7 @@ _dir = getDir _crashwreck;
 deleteVehicle _crashwreck;
 deleteVehicle _landingzone;
 
-_isWater = surfaceIsWater [getPos _crashwreck select 0, getPos _crashwreck select 1];
+local _isWater = surfaceIsWater [getPos _crashwreck select 0, getPos _crashwreck select 1];
 
 if(_isWater) then {
 	
@@ -185,16 +189,18 @@ if(_isWater) then {
 		publicVariable "PVDZ_obj_Fire";
 	};
 	
-	_num = round(random RANDOM_LOOT) + GUARANTEED_LOOT;
-	
-	_itemTypes = Loot_SelectSingle(Loot_GetGroup("CrashSiteType"));
-	_lootGroup = Loot_GetGroup(_itemTypes select 2);
+	local _num = round(random RANDOM_LOOT) + GUARANTEED_LOOT;
+	local _itemTypes = Loot_SelectSingle(Loot_GetGroup("CrashSiteType"));
+	local _lootGroup = Loot_GetGroup(_itemTypes select 2);
+	local _radius = 0;
+	local _lootPos = [0,0,0];
+	local _lootVeh = objNull;
 	
 	{
-		_maxLootRadius = (random MAX_LOOT_RADIUS) + MIN_LOOT_RADIUS;
-		_lootPos = [_pos, _maxLootRadius, random 360] call BIS_fnc_relPos;
+		_radius = (random MAX_LOOT_RADIUS) + MIN_LOOT_RADIUS;
+		_lootPos = [_pos, _radius, random 360] call BIS_fnc_relPos;
 		_lootPos set [2, 0];
-		_lootVeh = Loot_Spawn(_x, _lootPos);
+		_lootVeh = Loot_Spawn(_x, _lootPos, "");
 		_lootVeh setVariable ["permaLoot", true];
 		_lootArray set[count _lootArray, _lootVeh];
 		if (LOWER_GRASS) then {
@@ -205,8 +211,8 @@ if(_isWater) then {
 		
 	if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: Loot spawn at '%1' with loot group '%2'", _lootPos, (_itemTypes select 2)]);};
 	
-	_endTime = time - _time;
-	_time = time;
+	local _endTime = time - _time;
+	local _time = time;
 	
 	if (_messageType == "Hint") then {
 		RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_CRASH",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
@@ -217,14 +223,13 @@ if(_isWater) then {
 	
 	if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: Crash completed! Wreck at: %2 - Runtime: %1 Seconds || Distance from calculated POC: %3 meters", round(_endTime), str(_pos), round(_pos distance _crash)]);};
 	
-	_marker_pos = [_pos,0,MARKER_RADIUS,0,1,2000,0] call BIS_fnc_findSafePos;
+	local _marker_pos = [_pos,0,MARKER_RADIUS,0,1,2000,0] call BIS_fnc_findSafePos;
 	
 	// Remove the crash craters so they don't cover up the loot.
-	_craters = nearestObjects [_pos, ["CraterLong"], 20];
+	{deleteVehicle _x;} count (nearestObjects [_pos, ["CraterLong"], 50]);
 	
-	if (count _craters > 0) then {
-		{deleteVehicle _x;} count _craters;
-	};
+	local _marker = "";
+	local _mdot = "";
 	
 	while {!_end} do {
 		if(SHOW_MARKER) then {
@@ -261,8 +266,6 @@ if(_isWater) then {
 		
 		{
 			if((isPlayer _x) && (_x distance _pos <= 25)) then {
-				_finder = name _x;
-				
 				if (_messageType == "Hint") then {
 					RemoteMessage = ["hintWithImage",["STR_CL_ACS_TITLE",["STR_CL_ACS_SUCCESS",_crashName]],[_img,TITLE_COLOR,TITLE_SIZE,IMAGE_SIZE]];
 				} else {
@@ -270,10 +273,10 @@ if(_isWater) then {
 				};
 				publicVariable "RemoteMessage";
 				
-				if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: Crash found by %1, removing the marker" , _finder]);};
+				if (DEBUG_MODE) then {diag_log(format["CRASHSPAWNER: Crash found by %1, removing the marker" , (name _x)]);};
 				_end = true;
 			};
-		} forEach playableUnits;
+		} count playableUnits;
 		if(!SHOW_MARKER) then {uiSleep 3;};
 	};
 };
