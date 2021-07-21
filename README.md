@@ -1,8 +1,8 @@
 Animated Crash Spawner v1.3.3
 ==============
 
-I always thought this was a cool server event so I updated it for DayZ Epoch 1.0.6.2, gave it some code optimization, and added some new features.
-Updated for DayZ Epoch 1.0.7 on 5-31-2021.
+### Updated for DayZ Epoch 1.0.7.
+* Uses the client side marker manager
 
 ### Updates for DayZ Epoch 1.0.6.2.
 * Updated to utilize the new 1.0.6+ loot tables.
@@ -13,21 +13,21 @@ Updated for DayZ Epoch 1.0.7 on 5-31-2021.
 * Automatically detects the map that you are using and adjusts accordingly.
 * Configurable blacklist per map.
 
-### Updated for DayZ Epoch 1.0.7.
-
 ### Install Instructions
 
 1. Click ***[Clone or Download](https://github.com/worldwidesorrow/Animated-Crash-Spawner/archive/master.zip)*** the green button on the right side of the Github page.
 
-	> Recommended PBO tool for all "pack", "repack", or "unpack" steps: ***[PBO Manager](http://www.armaholic.com/page.php?id=16369)***
+2. This mod is dependent on the Client Side Marker Manager. Download it ***[here](https://github.com/worldwidesorrow/Client-Side-Marker-Manager/)*** and install it according to the instructions.
+
+3. This mod is dependent on the Epoch community stringtable. Download the stringtable ***[here](https://github.com/oiad/communityLocalizations/)*** and place file stringTable.xml in the root of your mission folder.
 	
-2. Unpack your server PBO and place file ***animated_crash_spawner.sqf*** in directory ***dayz_server\modules***
+4. Unpack your server PBO and place file ***animated_crash_spawner.sqf*** in directory ***dayz_server\modules***
 
-3. Save the file and repack your server PBO
+5. Save the file and repack your server PBO
 
-4. Unpack your mission PBO
+6. Unpack your mission PBO
 
-5. Open ***init.sqf***
+7. Open ***init.sqf***
 
 	Find this block of code:
 	
@@ -53,7 +53,7 @@ Updated for DayZ Epoch 1.0.7 on 5-31-2021.
 	
 	This will spawn an animated heli/plane crash every 30 minutes while your server is online. The first will spawn at 5 minutes past the hour. Adjust and add entries as desired.
 	
-6. Repack your mission PBO
+8. Repack your mission PBO
 
 	Options: You can configure the animated crash spawner with the following block of defines and variables near the top of the file.
 

@@ -228,27 +228,22 @@ if(_isWater) then {
 	// Remove the crash craters so they don't cover up the loot.
 	{deleteVehicle _x;} count (nearestObjects [_pos, ["CraterLong"], 50]);
 	
-	local _marker = "";
-	local _mdot = "";
+	local _markers = [1,1];
+	local _markerIndex = -1;
+	
+	if(SHOW_MARKER) then {
+		//[position,createMarker,setMarkerColor,setMarkerType,setMarkerShape,setMarkerBrush,setMarkerSize,setMarkerText,setMarkerAlpha]
+		_markers set [0, [_marker_pos, format ["loot_event_marker_%1", _time], "ColorYellow", "","ELLIPSE", "", [(MARKER_RADIUS + 50), (MARKER_RADIUS + 50)], [], 0.5]];
+		if(MARKER_NAME) then {
+			_markers set [1, [_marker_pos, format ["dot_%1", _time], "ColorBlack", "mil_dot","", "", [], ["STR_CL_ESE_CRASHSITE_MARKER",_crashName], 0]];
+		};
+		DZE_ServerMarkerArray set [count DZE_ServerMarkerArray, _markers]; // Markers added to global array for JIP player requests.
+		_markerIndex = count DZE_ServerMarkerArray - 1;
+		PVDZ_ServerMarkerSend = ["start",_markers];
+		publicVariable "PVDZ_ServerMarkerSend";
+	};
 	
 	while {!_end} do {
-		if(SHOW_MARKER) then {
-			_marker = createMarker [ format ["loot_event_marker_%1", _time], _marker_pos];
-			_marker setMarkerShape "ELLIPSE";
-			_marker setMarkerColor "ColorYellow";
-			_marker setMarkerAlpha 0.5;
-			_marker setMarkerSize [(MARKER_RADIUS + 50), (MARKER_RADIUS + 50)];
-			_marker setMarkerText _crashName;
-			
-			if(MARKER_NAME) then {
-				_mdot = createMarker [format ["dot_%1", _time], _marker_pos];
-				_mdot setMarkerColor "ColorBlack";
-				_mdot setMarkerType "mil_dot";
-				_mdot setMarkerText format ["%1 Crashsite",_crashName];
-			};
-			uiSleep 3; deleteMarker _marker; if(MARKER_NAME) then {deleteMarker _mdot;};
-		};
-		
 		if ((time - _time) >= CRASH_TIMEOUT) then {
 			deleteVehicle _crash;
 			{deleteVehicle _x;} count _lootArray;
@@ -277,7 +272,20 @@ if(_isWater) then {
 				_end = true;
 			};
 		} count playableUnits;
-		if(!SHOW_MARKER) then {uiSleep 3;};
+		uiSleep 3;
+	};
+	
+	if ((count _markers) > 0) then {
+		// Tell all clients to remove the markers from the map
+		local _remove = [];
+		{
+			if (typeName _x == "ARRAY") then {
+				_remove set [count _remove, (_x select 1)];
+			};
+		} count _markers;
+		PVDZ_ServerMarkerSend = ["end",_remove];
+		publicVariable "PVDZ_ServerMarkerSend";
+		DZE_ServerMarkerArray set [_markerIndex, -1];
 	};
 };
 
